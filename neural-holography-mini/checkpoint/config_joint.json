@@ -1,0 +1,22 @@
+{
+  "image": "data/image/chinese.png",
+  "depth": "data/depth/chinese.png",
+  "channel": 1,
+  "steps": 1000,
+  "size": [
+    1920,
+    1080
+  ],
+  "learning_rate": 0.001,
+  "controlnet_mode": "joint",
+  "init_checkpoint": null,
+  "distance_near": 0.18,
+  "distance_far": 0.22,
+  "depth_threshold": 0.1,
+  "near_is": "bright",
+  "output": "output",
+  "checkpoint_dir": "checkpoint",
+  "device": "cuda",
+  "wavelength": 5.2e-07,
+  "base_distance": 0.2
+}
