@@ -1,38 +1,19 @@
 import argparse
-import csv
 import json
 import os
+from datetime import datetime
 
-import cv2
-import numpy as np
 import torch
 import torch.nn.functional as F
+from torch.utils.tensorboard import SummaryWriter
 
 from holonet import DepthControlNet, HoloNet
 from propagation import propagation_asm
+from utils.augmented_image_loader import ImageLoader
+from utils.perceptualloss import PerceptualLoss
 
 
-def load_rgb_target(path, channel, height, width, device):
-    image = cv2.imread(path, cv2.IMREAD_COLOR)
-    if image is None:
-        raise FileNotFoundError(f"Could not read RGB image: {path}")
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = image[..., channel].astype(np.float32) / 255.0
-    image = np.where(image <= 0.04045, image / 12.92, ((image + 0.055) / 1.055) ** 2.4)
-    tensor = torch.from_numpy(np.sqrt(image))[None, None]
-    tensor = F.interpolate(tensor, size=(height, width), mode="bilinear", align_corners=False)
-    return tensor.to(device)
-
-
-def load_depth(path, height, width, device):
-    depth = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    if depth is None:
-        raise FileNotFoundError(f"Could not read depth image: {path}")
-    depth = torch.from_numpy(depth.astype(np.float32) / 255.0)[None, None]
-    depth = F.interpolate(depth, size=(height, width), mode="bilinear", align_corners=False)
-    return depth.to(device)
-
-
+# ==================== 加载 HoloNet 权重 ====================
 def load_holonet_checkpoint(model, path, device):
     checkpoint = torch.load(path, map_location=device, weights_only=False)
     state_dict = checkpoint.get("holonet", checkpoint.get("model", checkpoint)) if isinstance(checkpoint, dict) else checkpoint
@@ -41,34 +22,28 @@ def load_holonet_checkpoint(model, path, device):
         raise ValueError(f"Checkpoint does not match HoloNet (missing={missing}, unexpected={unexpected})")
 
 
-def save_phase(phase, path):
-    phase = phase.detach().squeeze().cpu().numpy()
-    phase_u8 = np.round((1.0 - ((phase + np.pi) % (2 * np.pi)) / (2 * np.pi)) * 255).astype(np.uint8)
-    if not cv2.imwrite(path, phase_u8):
-        raise OSError(f"Could not write image: {path}")
+# ==================== 振幅损失：逐图亮度匹配后计算感知损失 ====================
+def amplitude_loss(reconstruction, target, loss_fn):
+    scale = (reconstruction * target).mean(dim=(1, 2, 3), keepdim=True)
+    scale = scale / reconstruction.square().mean(dim=(1, 2, 3), keepdim=True).clamp_min(1e-8)
+    return loss_fn(reconstruction * scale, target), scale
 
 
-def save_amplitude(amplitude, path):
-    amplitude = amplitude.detach().squeeze().cpu().numpy()
-    image = np.uint8(np.clip(amplitude, 0, 1) * 255)
-    if not cv2.imwrite(path, image):
-        raise OSError(f"Could not write image: {path}")
-
-
-def merged_amplitude_loss(reconstructions, masks, target):
-    """Select each plane's region before fitting one global amplitude scale."""
+def merged_amplitude_loss(reconstructions, masks, target, loss_fn):
+    """Select each plane's region before evaluating the complete image."""
     merged = sum(recon * mask for recon, mask in zip(reconstructions, masks))
-    scale = (merged * target).mean() / merged.square().mean().clamp_min(1e-8)
-    loss = F.mse_loss(merged * scale, target)
+    loss, scale = amplitude_loss(merged, target, loss_fn)
     return loss, scale, merged
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Overfit HoloNet to a single RGB/depth pair.")
-    parser.add_argument("--image", default="data/image/chinese.png")
-    parser.add_argument("--depth", default="data/depth/chinese.png")
+    # ==================== 1. 解析训练参数 ====================
+    parser = argparse.ArgumentParser(description="Train HoloNet on a directory of RGB/depth pairs.")
+    parser.add_argument("--image", default='D:/wy/3d-ARIA/data/DIV2K_train_HR')
+    parser.add_argument("--depth", default='D:/wy/3d-ARIA/data/DIV2K_train_HR_depth')
     parser.add_argument("--channel", type=int, choices=(0, 1, 2), default=1, help="RGB channel: 0, 1, or 2")
-    parser.add_argument("--steps", type=int, default=1000)
+    parser.add_argument("--epochs", type=int, default=20)
+    parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--size", type=int, nargs=2, default=(1920, 1080), metavar=("WIDTH", "HEIGHT"))
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--controlnet-mode", choices=("off", "joint", "controlnet-only"), default="off")
@@ -77,13 +52,16 @@ def main():
     parser.add_argument("--distance-far", type=float, default=0.22, help="Far-plane propagation distance in meters")
     parser.add_argument("--depth-threshold", type=float, default=0.1, help="Normalized depth threshold separating the two planes")
     parser.add_argument("--near-is", choices=("dark", "bright"), default="bright")
-    parser.add_argument("--output", default="output")
+    parser.add_argument("--runid", default=datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
     parser.add_argument("--checkpoint-dir", default="checkpoint")
     args = parser.parse_args()
 
+    # ==================== 2. 检查参数有效性 ====================
+    if not args.runid or any(not (c.isalnum() or c in "_-") for c in args.runid):
+        parser.error("--runid may contain only letters, numbers, underscores and hyphens")
     width, height = args.size
-    if args.steps < 1 or min(width, height) < 16:
-        parser.error("--steps must be positive and both output dimensions must be at least 16")
+    if min(args.epochs, args.batch_size) < 1 or min(width, height) < 16:
+        parser.error("--epochs and --batch-size must be positive and both dimensions must be at least 16")
     if not 0.0 < args.depth_threshold < 1.0:
         parser.error("--depth-threshold must be between 0 and 1")
     if args.controlnet_mode != "off" and args.distance_near == args.distance_far:
@@ -93,33 +71,30 @@ def main():
     if args.controlnet_mode == "controlnet-only" and not args.init_checkpoint:
         parser.error("--init-checkpoint is required for controlnet-only mode")
 
+    # ==================== 3. 设置设备、波长与数据 loader ====================
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     wavelength = (638e-9, 520e-9, 450e-9)[args.channel]
-    target = load_rgb_target(args.image, args.channel, height, width, device)
+    image_loader = ImageLoader(args.image, channel=args.channel, batch_size=args.batch_size,
+                               image_res=(height, width), shuffle=True,
+                               vertical_flips=False, horizontal_flips=False, direct_resize=True,
+                               depth_path=args.depth if args.controlnet_mode != "off" else None)
+    num_batches = (len(image_loader.im_names) + args.batch_size - 1) // args.batch_size
     padded_height = (height + 15) // 16 * 16
     padded_width = (width + 15) // 16 * 16
-    network_target = F.pad(target, (0, padded_width - width, 0, padded_height - height), mode="replicate")
 
+    # ==================== 4. 初始化 HoloNet 并加载已有权重 ====================
     model_distance = (args.distance_near + args.distance_far) / 2 if args.controlnet_mode != "off" else 0.2
     model = HoloNet(wavelength=wavelength, distance=model_distance).to(device)
     if args.init_checkpoint:
         load_holonet_checkpoint(model, args.init_checkpoint, device)
 
+    # ==================== 5. 创建 ControlNet，设置双深度 ====================
     controlnet = None
     if args.controlnet_mode != "off":
         controlnet = DepthControlNet(model.final_phase_only.net[0]).to(device)
-        depth = load_depth(args.depth, height, width, device)
-        depth = F.pad(depth, (0, padded_width - width, 0, padded_height - height), mode="replicate")
-        near_mask = depth[..., :height, :width] <= args.depth_threshold
-        if args.near_is == "bright":
-            near_mask = ~near_mask
-        far_mask = ~near_mask
-        if not near_mask.any() or not far_mask.any():
-            parser.error("The depth threshold must split the depth map into two non-empty regions")
-        masks = (near_mask.float(), far_mask.float())
-        plane_targets = tuple(target * mask for mask in masks)
         distances = (args.distance_near, args.distance_far)
 
+    # ==================== 6. 选择可训练参数，创建优化器与感知损失 ====================
     if args.controlnet_mode == "controlnet-only":
         for parameter in model.parameters():
             parameter.requires_grad_(False)
@@ -130,82 +105,78 @@ def main():
     else:
         trainable = model.parameters()
     optimizer = torch.optim.Adam(trainable, lr=args.learning_rate)
+    # 与原项目默认 vgg-low 一致：像素项 + 0.025 × VGG 特征项。
+    loss_fn = PerceptualLoss(lambda_feat=0.025).to(device).eval()
 
-    os.makedirs(args.output, exist_ok=True)
+    # ==================== 7. 按 runid 保存配置，拒绝覆盖已有运行 ====================
     os.makedirs(args.checkpoint_dir, exist_ok=True)
-    losses = []
-    for step in range(args.steps):
-        optimizer.zero_grad(set_to_none=True)
-        phase = model(network_target, depth=depth if controlnet is not None else None, controlnet=controlnet)
-        phase = phase[..., :height, :width]
-        slm_field = torch.polar(torch.ones_like(phase), phase)
-
-        if controlnet is None:
-            recon_amp = propagation_asm(slm_field, model.feature_size, wavelength, model.distance).abs()
-            scale = (recon_amp * target).mean() / recon_amp.square().mean().clamp_min(1e-8)
-            loss = F.mse_loss(recon_amp * scale, target)
-        else:
-            reconstructions = [propagation_asm(slm_field, model.feature_size, wavelength, distance).abs()
-                               for distance in distances]
-            loss, scale, merged = merged_amplitude_loss(reconstructions, masks, target)
-            # Diagnostics: area-weighted contributions add up to the merged MSE.
-            with torch.no_grad():
-                squared_error = (merged * scale - target).square()
-                plane_losses = [(squared_error * mask).mean() for mask in masks]
-
-        loss.backward()
-        optimizer.step()
-        if controlnet is None:
-            losses.append((step + 1, float(loss.detach())))
-            print(f"step {step + 1:03d}/{args.steps}: loss={losses[-1][-1]:.6f}")
-        else:
-            loss_values = [float(item.detach()) for item in plane_losses]
-            losses.append((step + 1, *loss_values, float(loss.detach())))
-            print(f"step {step + 1:03d}/{args.steps}: near_contribution={loss_values[0]:.6f} "
-                  f"far_contribution={loss_values[1]:.6f} merged_mse={losses[-1][-1]:.6f}")
-
-    model.eval()
-    if controlnet is not None:
-        controlnet.eval()
-    with torch.no_grad():
-        final_phase = model(network_target, depth=depth if controlnet is not None else None, controlnet=controlnet)
-        final_phase = final_phase[..., :height, :width]
-        save_phase(final_phase, os.path.join(args.output, "phase.png"))
-        if controlnet is None:
-            recon = propagation_asm(torch.polar(torch.ones_like(final_phase), final_phase),
-                                    model.feature_size, wavelength, model.distance).abs()
-            recon = recon / recon.max().clamp_min(1e-8)
-            save_amplitude(recon, os.path.join(args.output, "reconstruction.png"))
-        else:
-            slm_field = torch.polar(torch.ones_like(final_phase), final_phase)
-            reconstructions = [propagation_asm(slm_field, model.feature_size, wavelength, distance).abs()
-                               for distance in distances]
-            _, scale, merged = merged_amplitude_loss(reconstructions, masks, target)
-            save_amplitude(merged * scale, os.path.join(args.output, "reconstruction_merged.png"))
-            save_amplitude(target, os.path.join(args.output, "target.png"))
-            for index, (recon, goal) in enumerate(zip(reconstructions, plane_targets), start=1):
-                recon = recon / recon.max().clamp_min(1e-8)
-                save_amplitude(recon, os.path.join(args.output, f"reconstruction_plane{index}.png"))
-                save_amplitude(goal, os.path.join(args.output, f"target_plane{index}.png"))
-
-    suffix = args.controlnet_mode.replace("-", "_")
-    torch.save(model.state_dict(), os.path.join(args.checkpoint_dir, f"holonet_{suffix}.pth"))
-    if controlnet is not None:
-        torch.save(controlnet.state_dict(), os.path.join(args.checkpoint_dir, f"controlnet_{suffix}.pth"))
-    loss_path = os.path.join(args.checkpoint_dir, f"loss_{suffix}.csv")
-    with open(loss_path, "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(("step", "near_mse_contribution", "far_mse_contribution", "merged_mse") if controlnet is not None
-                        else ("step", "mse"))
-        writer.writerows(losses)
     config = vars(args).copy()
     config.update({"device": str(device), "wavelength": wavelength, "base_distance": model.distance})
-    config["loss_type"] = "merged_amplitude_mse" if controlnet is not None else "single_plane_amplitude_mse"
-    with open(os.path.join(args.checkpoint_dir, f"config_{suffix}.json"), "w", encoding="utf-8") as file:
+    config["loss_type"] = "merged_amplitude_perceptual" if controlnet is not None else "single_plane_amplitude_perceptual"
+    config["perceptual_lambda_feat"] = loss_fn.lambda_feat
+    config_path = os.path.join(args.checkpoint_dir, f"{args.runid}_config.json")
+    with open(config_path, "x", encoding="utf-8") as file:
         json.dump(config, file, indent=2)
-    print(f"Saved output images to: {os.path.abspath(args.output)}")
-    print(f"Saved weights and training records to: {os.path.abspath(args.checkpoint_dir)}")
+    suffix = args.controlnet_mode.replace("-", "_")
+    # ==================== 8. TensorBoard 按 runid 记录训练 ====================
+    log_dir = os.path.join(args.checkpoint_dir, "tensorboard", args.runid)
+    with SummaryWriter(log_dir=log_dir) as writer:
+        for epoch in range(args.epochs):
+            epoch_loss, num_images = 0.0, 0
+            for batch, loaded in enumerate(image_loader):
+                target = loaded[0]
+                depth = loaded[3] if controlnet is not None else None
+                # 8.1 准备当前 batch：振幅、深度分区与网络输入补齐
+                target = target.to(device)
+                network_target = F.pad(target, (0, padded_width - width, 0, padded_height - height), mode="replicate")
+                if controlnet is not None:
+                    depth = depth.to(device)
+                    near_mask = depth <= args.depth_threshold
+                    if args.near_is == "bright":
+                        near_mask = ~near_mask
+                    masks = (near_mask.float(), (~near_mask).float())
+                    depth = F.pad(depth, (0, padded_width - width, 0, padded_height - height), mode="replicate")
+                # 8.2 前向生成相位，构造 SLM 纯相位光场
+                optimizer.zero_grad(set_to_none=True)
+                phase = model(network_target, depth=depth if controlnet is not None else None, controlnet=controlnet)
+                phase = phase[..., :height, :width]
+                slm_field = torch.polar(torch.ones_like(phase), phase)
+
+                # 8.3 ASM 传播与感知损失：双深度先按掩膜拼接，再比较完整目标
+                if controlnet is None:
+                    recon_amp = propagation_asm(slm_field, model.feature_size, wavelength, model.distance).abs()
+                    loss, _ = amplitude_loss(recon_amp, target, loss_fn)
+                else:
+                    reconstructions = [propagation_asm(slm_field, model.feature_size, wavelength, distance).abs()
+                                       for distance in distances]
+                    loss, _, _ = merged_amplitude_loss(reconstructions, masks, target, loss_fn)
+
+                # 8.4 反向传播与参数更新
+                loss.backward()
+                optimizer.step()
+                # 8.5 记录当前 batch 的损失
+                loss_value = loss.item()
+                global_step = epoch * num_batches + batch + 1
+                writer.add_scalar("Loss/train_step", loss_value, global_step)
+                epoch_loss += loss_value * target.shape[0]
+                num_images += target.shape[0]
+                print(f"epoch {epoch + 1:02d}/{args.epochs} batch {batch + 1}/{num_batches}: perceptual_loss={loss_value:.6f}")
+
+            # ==================== 9. 每个 epoch 保存一次权重 ====================
+            tag = f"{args.runid}_{suffix}_epoch_{epoch + 1:03d}"
+            checkpoint = {"holonet": model.state_dict(), "config": config,
+                          "epoch": epoch + 1, "global_step": global_step}
+            if controlnet is not None:
+                checkpoint["controlnet"] = controlnet.state_dict()
+            torch.save(checkpoint, os.path.join(args.checkpoint_dir, f"{tag}.pth"))
+
+            # ==================== 10. 记录逐图平均的 epoch 损失并写盘 ====================
+            writer.add_scalar("Loss/train_epoch", epoch_loss / num_images, epoch + 1)
+            writer.add_scalar("Learning_rate", optimizer.param_groups[0]["lr"], epoch + 1)
+            writer.flush()
+            print(f"Saved epoch {epoch + 1} weights: {tag}")
 
 
+# ==================== 程序入口 ====================
 if __name__ == "__main__":
     main()

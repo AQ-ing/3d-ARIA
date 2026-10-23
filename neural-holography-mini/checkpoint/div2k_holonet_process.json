@@ -1,0 +1,31 @@
+{
+  "run_name": "div2k_holonet",
+  "batch_size": 8,
+  "arguments": [
+    "-u",
+    "-B",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\train_holonet.py",
+    "--controlnet-mode",
+    "off",
+    "--batch-size",
+    "8",
+    "--epochs",
+    "20",
+    "--micro-batch-size",
+    "1",
+    "--num-workers",
+    "2",
+    "--device",
+    "cuda",
+    "--run-name",
+    "div2k_holonet"
+  ],
+  "stderr": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\checkpoint\\div2k_holonet_stderr.log",
+  "micro_batch_size": 1,
+  "mode": "off",
+  "process_id": 3068,
+  "stdout": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\checkpoint\\div2k_holonet_stdout.log",
+  "checkpoint": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\checkpoint\\div2k_holonet",
+  "epochs": 20,
+  "status": "stopped_by_user"
+}

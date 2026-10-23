@@ -1,0 +1,5 @@
+Device: cuda; samples: 800; batch size: 8; micro batch: 1; batches/epoch: 100
+Images: D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\output\div2k_holonet
+Checkpoints: D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\checkpoint\div2k_holonet
+epoch 001/20 train batch 1/100 samples=8/800 mse=0.054327
+epoch 001/20 train batch 10/100 samples=80/800 mse=0.037172
