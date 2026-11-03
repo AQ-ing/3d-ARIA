@@ -1,0 +1,199 @@
+{
+  "config": {
+    "size": [
+      1072,
+      1920
+    ],
+    "roi": [
+      880,
+      1600
+    ],
+    "wavelength": 5.2e-07,
+    "pitch": 6.4e-06,
+    "base_depth": 0.2,
+    "checkpoint": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261102_102239_off_reference\\checkpoint\\current.pth",
+    "training_steps": 0
+  },
+  "baseline_current": {
+    "mse": 0.0007711405050940812,
+    "psnr": 31.12866484429464,
+    "scale": 1.0591752529144287
+  },
+  "stable_common_band_base": {
+    "mse": 0.0008334090234711766,
+    "psnr": 30.791418016678882,
+    "scale": 1.0590814352035522
+  },
+  "ideal_common_grid": [
+    {
+      "depth": 0.18,
+      "complex_relative_error_no_crop": 4.2532255406513286e-07,
+      "complex_relative_error_with_aperture": 0.08609339594841003,
+      "intermediate_energy_outside_slm_fraction": 0.007483959197998047
+    },
+    {
+      "depth": 0.19,
+      "complex_relative_error_no_crop": 4.33570789937221e-07,
+      "complex_relative_error_with_aperture": 0.07943926006555557,
+      "intermediate_energy_outside_slm_fraction": 0.00638657808303833
+    },
+    {
+      "depth": 0.21,
+      "complex_relative_error_no_crop": 4.365972472442081e-07,
+      "complex_relative_error_with_aperture": 0.04740370810031891,
+      "intermediate_energy_outside_slm_fraction": 0.002323627471923828
+    },
+    {
+      "depth": 0.22,
+      "complex_relative_error_no_crop": 4.3392213910919963e-07,
+      "complex_relative_error_with_aperture": 0.058492112904787064,
+      "intermediate_energy_outside_slm_fraction": 0.003501594066619873
+    }
+  ],
+  "output_field_transfer": [
+    {
+      "depth": 0.18,
+      "unshifted": {
+        "mse": 0.017161782830953598,
+        "psnr": 17.65437597989255,
+        "scale": 1.0222492218017578
+      },
+      "shift_complex": {
+        "mse": 0.0009430084028281271,
+        "psnr": 30.254844373945602,
+        "scale": 1.0585401058197021
+      },
+      "shift_then_phase_only": {
+        "mse": 0.021969329565763474,
+        "psnr": 16.581831961669767,
+        "scale": 1.0782865285873413
+      }
+    },
+    {
+      "depth": 0.19,
+      "unshifted": {
+        "mse": 0.014583174139261246,
+        "psnr": 18.36147938217405,
+        "scale": 1.0284117460250854
+      },
+      "shift_complex": {
+        "mse": 0.0008509033359587193,
+        "psnr": 30.701197736923483,
+        "scale": 1.059003233909607
+      },
+      "shift_then_phase_only": {
+        "mse": 0.04786771163344383,
+        "psnr": 13.199573339286001,
+        "scale": 1.1733331680297852
+      }
+    },
+    {
+      "depth": 0.21,
+      "unshifted": {
+        "mse": 0.013674374669790268,
+        "psnr": 18.64092524860637,
+        "scale": 1.0335899591445923
+      },
+      "shift_complex": {
+        "mse": 0.001026840414851904,
+        "psnr": 29.884970465045335,
+        "scale": 1.0587352514266968
+      },
+      "shift_then_phase_only": {
+        "mse": 0.04139724373817444,
+        "psnr": 13.830285735928747,
+        "scale": 1.1497210264205933
+      }
+    },
+    {
+      "depth": 0.22,
+      "unshifted": {
+        "mse": 0.01676892675459385,
+        "psnr": 17.75494732234291,
+        "scale": 1.0283548831939697
+      },
+      "shift_complex": {
+        "mse": 0.0011152834631502628,
+        "psnr": 29.52614737247089,
+        "scale": 1.058908224105835
+      },
+      "shift_then_phase_only": {
+        "mse": 0.02375663071870804,
+        "psnr": 16.242151530861104,
+        "scale": 1.01288902759552
+      }
+    }
+  ],
+  "reuse_encoder_single_depth": [
+    {
+      "depth": 0.18,
+      "mse": 0.04127005860209465,
+      "psnr": 13.84364914438594,
+      "scale": 1.767387866973877
+    },
+    {
+      "depth": 0.19,
+      "mse": 0.034625496715307236,
+      "psnr": 14.606039877709694,
+      "scale": 1.1178436279296875
+    },
+    {
+      "depth": 0.2,
+      "mse": 0.0007711401558481157,
+      "psnr": 31.128666811194698,
+      "scale": 1.0591754913330078
+    },
+    {
+      "depth": 0.21,
+      "mse": 0.01545629557222128,
+      "psnr": 18.108945857941794,
+      "scale": 0.8733248114585876
+    },
+    {
+      "depth": 0.22,
+      "mse": 0.04189644008874893,
+      "psnr": 13.778228771648246,
+      "scale": 1.7168296575546265
+    }
+  ],
+  "multiplane": {
+    "isolated_layers_not_simultaneous": {
+      "mse": 0.0019313517259433866,
+      "psnr": 27.14138627967719,
+      "scale": 1.1203179359436035,
+      "near_psnr": 28.172036837683365,
+      "far_psnr": 25.393768516423986
+    },
+    "summed_complex": {
+      "mse": 0.004071094561368227,
+      "psnr": 23.902888099263066,
+      "scale": 1.100618600845337,
+      "near_psnr": 24.629797949680853,
+      "far_psnr": 22.562963093955716
+    },
+    "summed_angle": {
+      "mse": 0.06298252940177917,
+      "psnr": 12.007799019215021,
+      "scale": 0.3599073588848114,
+      "near_psnr": 12.956684237987835,
+      "far_psnr": 10.363492554245141
+    },
+    "summed_frozen_encoder": {
+      "mse": 0.04197067767381668,
+      "psnr": 13.770540184553415,
+      "scale": 1.7353875637054443,
+      "near_psnr": 13.610469526618445,
+      "far_psnr": 14.1708121103342
+    }
+  },
+  "complex_crosstalk": [
+    {
+      "depth": 0.18,
+      "unwanted_to_desired_energy_in_region": 0.017903512343764305
+    },
+    {
+      "depth": 0.22,
+      "unwanted_to_desired_energy_in_region": 0.01513652689754963
+    }
+  ]
+}

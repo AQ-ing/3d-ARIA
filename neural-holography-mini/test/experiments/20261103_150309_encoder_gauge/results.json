@@ -1,0 +1,85 @@
+{
+  "config": {
+    "checkpoint": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261102_102239_off_reference\\checkpoint\\current.pth",
+    "training_steps": 0,
+    "rotation": "exp(+i*2*pi*(z-z0)/wavelength) before frozen final_phase_only",
+    "size": [
+      1072,
+      1920
+    ],
+    "roi": [
+      880,
+      1600
+    ],
+    "wavelength": 5.2e-07,
+    "pitch": 6.4e-06,
+    "base_depth": 0.2
+  },
+  "depths": [
+    {
+      "depth": 0.18,
+      "raw": {
+        "psnr": 13.843650320449141,
+        "mse": 0.041270047426223755,
+        "scale": 1.767386555671692
+      },
+      "carrier_aligned": {
+        "psnr": 29.127184219097604,
+        "mse": 0.0012225920800119638,
+        "scale": 1.0545083284378052
+      }
+    },
+    {
+      "depth": 0.19,
+      "raw": {
+        "psnr": 14.60603707421634,
+        "mse": 0.034625519067049026,
+        "scale": 1.1178431510925293
+      },
+      "carrier_aligned": {
+        "psnr": 29.787395069476844,
+        "mse": 0.0010501721408218145,
+        "scale": 1.0573607683181763
+      }
+    },
+    {
+      "depth": 0.2,
+      "raw": {
+        "psnr": 31.12866615556125,
+        "mse": 0.0007711402722634375,
+        "scale": 1.0591754913330078
+      },
+      "carrier_aligned": {
+        "psnr": 31.12866615556125,
+        "mse": 0.0007711402722634375,
+        "scale": 1.0591754913330078
+      }
+    },
+    {
+      "depth": 0.21,
+      "raw": {
+        "psnr": 18.108951353332774,
+        "mse": 0.015456276014447212,
+        "scale": 0.8733247518539429
+      },
+      "carrier_aligned": {
+        "psnr": 29.720870344361966,
+        "mse": 0.001066382392309606,
+        "scale": 1.0385698080062866
+      }
+    },
+    {
+      "depth": 0.22,
+      "raw": {
+        "psnr": 13.778221048454686,
+        "mse": 0.0418965145945549,
+        "scale": 1.716829538345337
+      },
+      "carrier_aligned": {
+        "psnr": 29.38421390864874,
+        "mse": 0.001152334618382156,
+        "scale": 1.0405954122543335
+      }
+    }
+  ]
+}

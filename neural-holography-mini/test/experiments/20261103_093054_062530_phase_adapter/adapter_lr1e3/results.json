@@ -1,0 +1,12 @@
+{
+  "step": 600,
+  "mse": 0.005410830955952406,
+  "psnr": 22.667360339927303,
+  "elapsed_seconds": 77.57343469999614,
+  "trainable_parameters": 30225,
+  "controlnet_parameters": 1537285,
+  "setup_seconds": 1.077291299996432,
+  "peak_allocated_mb": 2132.177734375,
+  "near_psnr": 23.669514860301195,
+  "far_psnr": 20.955250286786196
+}

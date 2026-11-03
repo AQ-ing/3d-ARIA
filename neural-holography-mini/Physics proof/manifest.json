@@ -1,0 +1,53 @@
+{
+  "reference_layout": "PHAROS main.pdf, Fig. 6-8; layout analogy only",
+  "reference_pdf": "D:/wy/文献/main.pdf",
+  "training_steps_added": 0,
+  "display": "Saved 8-bit amplitude PNGs; no gamma, sharpening or histogram changes",
+  "metrics": "Original floating-point amplitude PSNR from saved JSON, ROI 1600x880, optimal scalar; not recomputed from PNGs",
+  "source_files": {
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\results.json": "5a8fbbe050148d29788114760a39736c2aadba2c22bf6e88b0960a13f5d91b69",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_110638_depth_physics\\results.json": "24bc362dcd2c87feed23480bbaa588118e0a3603aaf3068ba1ecde2e8a21bf51",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150105_quadratic_depth\\results.json": "4874ab3d645cd231762003e56382f48fb66be6630b0561cd0d76a747b383010f",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\target.png": "e629b94986ff423ae06627aaf10d8e02a0efa0e4285762b70a7ff1ceebcbc950",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\data\\depth\\0031.png": "7d99b88e44e43fb1be1808b2fd668bd32b404a5bbb23f69dd505ce7540e145d4",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\carrier_aligned_0.2.png": "29c2a47cf23901b763343560a8d7bba4eba25e328766bd81db4fea8e0df07a7c",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\raw_0.18.png": "0b53adfd3597e6b029944e286bccb231b7ffce115cba50643848e37544fa4cd9",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\carrier_aligned_0.18.png": "4bb6b0eb6a3cc1b5cec7f59e958cf322a86e391663cd52561c2ca0dab4626525",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\raw_0.22.png": "38d15169d878ba0808a1afaf532fe6b60918d34dff95e7d3d4ae122d57c4e69f",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\carrier_aligned_0.22.png": "80522d80d1d19bf6b6ea2d76616425bd959d04292886526e75a23c9850441938",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\raw_sum_frozen_encoder_near.png": "cfbdf2f62345fcb00296d35a8c49cb8360603342431e686a524ff48b053c16b7",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\aligned_sum_frozen_encoder_near.png": "0bea35aac19bddc7371f4c6c7187fc72a3ef3a372db06d028bb0c2dfabe4afbe",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\raw_sum_frozen_encoder_far.png": "8b74714237dd656d022a66e6fa5bb16e54c5bfed234343ab84d3f4b5adfbbca4",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\aligned_sum_frozen_encoder_far.png": "2917d188898cd643413dfdc1486f8a249a9aca3ae3e4ef316121099e6450b545",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\raw_sum_frozen_encoder_merged.png": "fb21fc6664d7ab75dd894097f0eab0ce2d0177a04f30422b514a73e61ba0259e",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_150411_encoder_gauge\\output\\aligned_sum_frozen_encoder_merged.png": "9dc112a22808fa8f71f069f53c601f8c4c7ab26c10ec989fe97257e906f1acfd",
+    "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\DEPTH_PHYSICS_VALIDATION.md": "07f94da8e0630fc9103c062986b65b799fa1ba861cc5701955c2ad6a5d951cdf"
+  },
+  "crops_xywh": {
+    "single_plane_inset": [
+      760,
+      360,
+      230,
+      210
+    ],
+    "Near: locomotive grille": [
+      870,
+      250,
+      280,
+      190
+    ],
+    "Far: fine branches": [
+      580,
+      0,
+      280,
+      190
+    ],
+    "Depth boundary: roof edge": [
+      1120,
+      150,
+      280,
+      190
+    ]
+  },
+  "near_fraction_roi": 0.7010525568181818
+}

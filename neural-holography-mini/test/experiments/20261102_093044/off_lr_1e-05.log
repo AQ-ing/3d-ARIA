@@ -1,0 +1,7 @@
+step 1/400: mse_loss=0.002799
+step 100/400: mse_loss=0.002790
+step 200/400: mse_loss=0.002782
+step 300/400: mse_loss=0.002773
+step 400/400: mse_loss=0.002763
+final mse_loss=0.002764 amplitude_mse=0.002764 amplitude_psnr=25.58 dB
+Saved D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\test\experiments\20261102_093044\output\off_lr_1e-05\recon-0031.png

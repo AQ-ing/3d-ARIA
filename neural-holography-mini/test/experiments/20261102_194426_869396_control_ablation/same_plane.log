@@ -1,0 +1,8 @@
+step 1/300: vgg-low_loss=0.009887
+step 100/300: vgg-low_loss=0.009117
+step 200/300: vgg-low_loss=0.008494
+step 300/300: vgg-low_loss=0.008150
+near: pixels=70.1% mse=0.000602 psnr=32.20 dB
+far: pixels=29.9% mse=0.000996 psnr=30.02 dB
+final vgg-low_loss=0.008156 amplitude_mse=0.000719908 amplitude_psnr=31.427231 dB
+Saved D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\test\experiments\20261102_194426_869396_control_ablation\output\same_plane\mergerecon-0031.png

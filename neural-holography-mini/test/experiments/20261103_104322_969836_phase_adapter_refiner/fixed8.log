@@ -1,0 +1,3 @@
+adapter_parameters=0 controlnet_parameters=1537285 frozen_base_parameters=2868466
+step 0/0: mse=0.00208394 psnr=26.8112 elapsed=0.8s
+{"step": 0, "mse": 0.0020839388016611338, "psnr": 26.811150389671017, "elapsed_seconds": 0.8188971000054153, "evaluation_seconds": 0.8188829999999143, "trainable_parameters": 0, "controlnet_parameters": 1537285, "setup_seconds": 1.1292589999939082, "peak_allocated_mb": 690.333984375, "near_psnr": 27.089469207202374, "far_psnr": 26.22093316484294}

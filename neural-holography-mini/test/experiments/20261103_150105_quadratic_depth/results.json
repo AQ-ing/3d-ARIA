@@ -1,0 +1,122 @@
+{
+  "config": {
+    "checkpoint": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261102_102239_off_reference\\checkpoint\\current.pth",
+    "size": [
+      1072,
+      1920
+    ],
+    "roi": [
+      880,
+      1600
+    ],
+    "wavelength": 5.2e-07,
+    "pitch": 6.4e-06,
+    "base_depth": 0.2,
+    "training_steps": 0,
+    "metric": "ROI amplitude PSNR, optimal scalar; bilinear resampling for scaled references",
+    "prewarp_amplitude": "A(m*r); m amplitude gain omitted to keep model input in original range; evaluation fits scalar"
+  },
+  "baseline": {
+    "psnr": 31.128665827744555,
+    "mse": 0.0007711403304710984,
+    "scale": 1.0591754913330078
+  },
+  "depths": [
+    {
+      "depth": 0.18,
+      "magnification": 0.8999999999999999,
+      "lens_vs_scaled_target": {
+        "psnr": 20.886299790466936,
+        "mse": 0.008153987117111683,
+        "scale": 1.027153730392456
+      },
+      "lens_vs_scaled_baseline": {
+        "psnr": 32.559760349998605,
+        "mse": 0.0005546563188545406,
+        "scale": 0.9991817474365234
+      },
+      "prewarped_base_vs_prewarped_target": {
+        "psnr": 30.650165899415043,
+        "mse": 0.0008609608630649745,
+        "scale": 1.0579943656921387
+      },
+      "prewarp_then_lens_vs_original_target": {
+        "psnr": 27.275400646577776,
+        "mse": 0.0018726643174886703,
+        "scale": 0.9557929635047913
+      }
+    },
+    {
+      "depth": 0.19,
+      "magnification": 0.95,
+      "lens_vs_scaled_target": {
+        "psnr": 23.85002494771234,
+        "mse": 0.004120951518416405,
+        "scale": 1.044485330581665
+      },
+      "lens_vs_scaled_baseline": {
+        "psnr": 32.51063572928723,
+        "mse": 0.0005609658546745777,
+        "scale": 0.9988674521446228
+      },
+      "prewarped_base_vs_prewarped_target": {
+        "psnr": 30.409563841492574,
+        "mse": 0.0009100046590901911,
+        "scale": 1.0589135885238647
+      },
+      "prewarp_then_lens_vs_original_target": {
+        "psnr": 27.15694619228436,
+        "mse": 0.001924444455653429,
+        "scale": 1.0086969137191772
+      }
+    },
+    {
+      "depth": 0.21,
+      "magnification": 1.0499999999999998,
+      "lens_vs_scaled_target": {
+        "psnr": 29.820916150967417,
+        "mse": 0.0010420975740998983,
+        "scale": 1.059166669845581
+      },
+      "lens_vs_scaled_baseline": {
+        "psnr": 32.26445270879474,
+        "mse": 0.0005936831585131586,
+        "scale": 1.0007179975509644
+      },
+      "prewarped_base_vs_prewarped_target": {
+        "psnr": 25.13347937071029,
+        "mse": 0.0030665642116218805,
+        "scale": 1.048378586769104
+      },
+      "prewarp_then_lens_vs_original_target": {
+        "psnr": 26.826339587957733,
+        "mse": 0.002076663076877594,
+        "scale": 1.1146522760391235
+      }
+    },
+    {
+      "depth": 0.22,
+      "magnification": 1.0999999999999999,
+      "lens_vs_scaled_target": {
+        "psnr": 30.247845069023338,
+        "mse": 0.000944529427215457,
+        "scale": 1.0552574396133423
+      },
+      "lens_vs_scaled_baseline": {
+        "psnr": 32.73700675412161,
+        "mse": 0.0005324751255102456,
+        "scale": 0.9972922801971436
+      },
+      "prewarped_base_vs_prewarped_target": {
+        "psnr": 23.036011616944524,
+        "mse": 0.004970485810190439,
+        "scale": 1.0355678796768188
+      },
+      "prewarp_then_lens_vs_original_target": {
+        "psnr": 26.81577166516165,
+        "mse": 0.0020817224867641926,
+        "scale": 1.1657243967056274
+      }
+    }
+  ]
+}

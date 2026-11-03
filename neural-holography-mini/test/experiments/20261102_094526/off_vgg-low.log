@@ -1,0 +1,11 @@
+step 1/800: vgg-low_loss=0.135458
+step 100/800: vgg-low_loss=0.104097
+step 200/800: vgg-low_loss=0.088763
+step 300/800: vgg-low_loss=0.080581
+step 400/800: vgg-low_loss=0.080014
+step 500/800: vgg-low_loss=0.071298
+step 600/800: vgg-low_loss=0.068867
+step 700/800: vgg-low_loss=0.067404
+step 800/800: vgg-low_loss=0.063947
+final vgg-low_loss=0.064342 amplitude_mse=0.004198317 amplitude_psnr=23.769248 dB
+Saved D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\test\experiments\20261102_094526\output\off_vgg-low\recon-0031.png

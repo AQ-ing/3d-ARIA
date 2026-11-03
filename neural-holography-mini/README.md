@@ -22,7 +22,14 @@ conda run --no-capture-output -n e2e python train_holonet.py --runid control01 -
 - `checkpoint/<runid>_config.json`：运行配置。
 - `checkpoint/tensorboard/<runid>/`：TensorBoard 日志，记录 `Loss/train_step`、`Loss/train_epoch` 和 `Learning_rate`；epoch 损失按实际图像数量平均。
 
-`runid` 默认生成时间名称，也可手动设置；已有同名运行会报错，防止覆盖。checkpoint 不包含 Adam 状态。`--init-checkpoint` 仅用于初始化 HoloNet，同时支持旧的纯 HoloNet 权重和新的合并 checkpoint。
+`runid` 默认生成时间名称，也可手动设置；已有同名运行会报错，防止覆盖。新 checkpoint 包含 Adam、epoch/step、随机数状态与 loader 顺序，可从完整 epoch 边界恢复。`--init-checkpoint` 仅用于初始化 HoloNet，同时支持旧的纯 HoloNet 权重和合并 checkpoint。
+
+```powershell
+# --epochs 表示目标总轮数；不指定时使用原训练配置中的总轮数
+conda run --no-capture-output -n e2e python train_holonet.py --resume-checkpoint checkpoint/<runid>_joint_epoch_007.pth --epochs 20
+```
+
+恢复时沿用 checkpoint 内的数据路径、batch size、模式、runid 和 TensorBoard 目录，只能额外指定 `--epochs`。旧 checkpoint 若没有 Adam 状态，只能用 `--init-checkpoint` 开始新训练。恢复较早的 checkpoint 时，如果同一 runid 已有更晚的权重，程序会拒绝覆盖。
 
 ```powershell
 tensorboard --logdir checkpoint/tensorboard

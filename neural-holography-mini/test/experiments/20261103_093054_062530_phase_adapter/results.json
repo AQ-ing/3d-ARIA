@@ -1,0 +1,90 @@
+[
+  {
+    "name": "adapter_lr1e3",
+    "command": [
+      "D:\\miniconda\\envs\\e2e\\python.exe",
+      "-B",
+      "-u",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\train_phase_adapter.py",
+      "--output",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_093054_062530_phase_adapter\\adapter_lr1e3",
+      "--steps",
+      "600",
+      "--learning-rate",
+      "0.001"
+    ],
+    "status": "completed",
+    "returncode": 0,
+    "metrics": {
+      "step": 600,
+      "mse": 0.005410830955952406,
+      "psnr": 22.667360339927303,
+      "elapsed_seconds": 77.57343469999614,
+      "trainable_parameters": 30225,
+      "controlnet_parameters": 1537285,
+      "setup_seconds": 1.077291299996432,
+      "peak_allocated_mb": 2132.177734375,
+      "near_psnr": 23.669514860301195,
+      "far_psnr": 20.955250286786196
+    }
+  },
+  {
+    "name": "adapter_lr1e4",
+    "command": [
+      "D:\\miniconda\\envs\\e2e\\python.exe",
+      "-B",
+      "-u",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\train_phase_adapter.py",
+      "--output",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_093054_062530_phase_adapter\\adapter_lr1e4",
+      "--steps",
+      "600",
+      "--learning-rate",
+      "0.0001"
+    ],
+    "status": "completed",
+    "returncode": 0,
+    "metrics": {
+      "step": 600,
+      "mse": 0.007543588522821665,
+      "psnr": 21.224220089162333,
+      "elapsed_seconds": 77.51726140000392,
+      "trainable_parameters": 30225,
+      "controlnet_parameters": 1537285,
+      "setup_seconds": 0.9984499999991385,
+      "peak_allocated_mb": 2132.177734375,
+      "near_psnr": 21.93922840971695,
+      "far_psnr": 19.9016947532245
+    }
+  },
+  {
+    "name": "zero_base_lr1e3",
+    "command": [
+      "D:\\miniconda\\envs\\e2e\\python.exe",
+      "-B",
+      "-u",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\train_phase_adapter.py",
+      "--output",
+      "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261103_093054_062530_phase_adapter\\zero_base_lr1e3",
+      "--steps",
+      "600",
+      "--learning-rate",
+      "0.001",
+      "--without-base"
+    ],
+    "status": "completed",
+    "returncode": 0,
+    "metrics": {
+      "step": 600,
+      "mse": 0.02153009921312332,
+      "psnr": 16.6695396889399,
+      "elapsed_seconds": 77.53231939999387,
+      "trainable_parameters": 30225,
+      "controlnet_parameters": 1537285,
+      "setup_seconds": 0.9937324000056833,
+      "peak_allocated_mb": 2131.986328125,
+      "near_psnr": 17.267852039392015,
+      "far_psnr": 15.524077157435235
+    }
+  }
+]

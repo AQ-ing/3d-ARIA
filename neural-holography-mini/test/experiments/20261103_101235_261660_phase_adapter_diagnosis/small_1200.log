@@ -1,0 +1,15 @@
+adapter_parameters=30225 controlnet_parameters=1537285 frozen_base_parameters=2868466
+step 0/1200: mse=0.01679408 psnr=17.7484 elapsed=0.1s
+step 100/1200: mse=0.00786210 psnr=21.0446 elapsed=13.4s
+step 200/1200: mse=0.00661485 psnr=21.7948 elapsed=26.2s
+step 300/1200: mse=0.00609753 psnr=22.1485 elapsed=39.0s
+step 400/1200: mse=0.00581712 psnr=22.3529 elapsed=51.9s
+step 500/1200: mse=0.00565998 psnr=22.4719 elapsed=64.7s
+step 600/1200: mse=0.00546375 psnr=22.6251 elapsed=77.5s
+step 700/1200: mse=0.00532220 psnr=22.7391 elapsed=90.4s
+step 800/1200: mse=0.00520226 psnr=22.8381 elapsed=103.2s
+step 900/1200: mse=0.00509062 psnr=22.9323 elapsed=116.0s
+step 1000/1200: mse=0.00496096 psnr=23.0443 elapsed=128.9s
+step 1100/1200: mse=0.00501856 psnr=22.9942 elapsed=141.7s
+step 1200/1200: mse=0.00494117 psnr=23.0617 elapsed=154.5s
+{"step": 1200, "mse": 0.0049411701038479805, "psnr": 23.06170194908214, "elapsed_seconds": 154.51483040000312, "trainable_parameters": 30225, "controlnet_parameters": 1537285, "setup_seconds": 0.9875771999941207, "peak_allocated_mb": 2132.177734375, "near_psnr": 24.045992890267776, "far_psnr": 21.372120496019708}

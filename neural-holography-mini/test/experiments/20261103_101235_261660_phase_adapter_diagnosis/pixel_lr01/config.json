@@ -1,0 +1,30 @@
+{
+  "steps": 1200,
+  "learning_rate": 0.1,
+  "without_base": false,
+  "initial": "D:\\wy\\3d-ARIA\\holonet\\controlnet\\3d-ARIA\\neural-holography-mini\\test\\experiments\\20261102_102239_off_reference\\checkpoint\\current.pth",
+  "size": [
+    1072,
+    1920
+  ],
+  "roi": [
+    880,
+    1600
+  ],
+  "distances": [
+    0.18,
+    0.22
+  ],
+  "base_distance": 0.2,
+  "distance_normalizer": 0.02,
+  "wavelength": 5.2e-07,
+  "pitch": 6.4e-06,
+  "threshold": 0.1,
+  "near_is": "bright",
+  "seed": 42,
+  "channel": 1,
+  "loss": "merged_amplitude_mse",
+  "adapter_version": 1,
+  "adapter_kind": "pixel",
+  "device": "cuda"
+}

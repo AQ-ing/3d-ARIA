@@ -1,0 +1,17 @@
+step 1/1200: vgg-low_loss=0.163544
+step 100/1200: vgg-low_loss=0.127000
+step 200/1200: vgg-low_loss=0.089500
+step 300/1200: vgg-low_loss=0.074643
+step 400/1200: vgg-low_loss=0.066019
+step 500/1200: vgg-low_loss=0.059938
+step 600/1200: vgg-low_loss=0.055877
+step 700/1200: vgg-low_loss=0.052381
+step 800/1200: vgg-low_loss=0.049580
+step 900/1200: vgg-low_loss=0.047630
+step 1000/1200: vgg-low_loss=0.045576
+step 1100/1200: vgg-low_loss=0.043761
+step 1200/1200: vgg-low_loss=0.042387
+near: pixels=70.1% mse=0.001699 psnr=27.70 dB
+far: pixels=29.9% mse=0.004926 psnr=23.08 dB
+final vgg-low_loss=0.042324 amplitude_mse=0.002663712 amplitude_psnr=25.745128 dB
+Saved D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\test\experiments\20261102_194426_869396_control_ablation\output\only_small_gap\mergerecon-0031.png

@@ -1,0 +1,17 @@
+step 1/1200: mse_loss=0.016794
+step 100/1200: mse_loss=0.008474
+step 200/1200: mse_loss=0.005025
+step 300/1200: mse_loss=0.003920
+step 400/1200: mse_loss=0.003346
+step 500/1200: mse_loss=0.002996
+step 600/1200: mse_loss=0.002742
+step 700/1200: mse_loss=0.002559
+step 800/1200: mse_loss=0.002416
+step 900/1200: mse_loss=0.002341
+step 1000/1200: mse_loss=0.002204
+step 1100/1200: mse_loss=0.002127
+step 1200/1200: mse_loss=0.002042
+near: pixels=70.1% mse=0.001591 psnr=27.98 dB
+far: pixels=29.9% mse=0.003116 psnr=25.06 dB
+final mse_loss=0.002047 amplitude_mse=0.002047125 amplitude_psnr=26.888556 dB
+Saved D:\wy\3d-ARIA\holonet\controlnet\3d-ARIA\neural-holography-mini\test\experiments\20261102_194426_869396_control_ablation\output\only_mse\mergerecon-0031.png
